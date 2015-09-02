@@ -1,0 +1,23 @@
+{
+  "name": "remarkable",
+  "version": "0.0.1",
+  "description": "Create and display remark slideshows easily",
+  "main": "remarkable",
+  "scripts": {
+    "test": "./remarkable test.md --css test.css"
+  },
+  "keywords": [
+    "remark",
+    "slideshow"
+  ],
+  "author": "Conlin Durbin <conlindurbin@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.0.3",
+    "open": "0.0.5"
+  },
+  "preferGlobal": "true",
+  "bin": {
+    "remarkable" : "remarkable"
+  }
+}

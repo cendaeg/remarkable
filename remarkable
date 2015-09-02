@@ -1,0 +1,52 @@
+#!/usr/local/bin/node
+
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+        return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+        ;
+        });
+  };
+}
+
+var fs = require("fs");
+var colors = require("colors");
+var open = require("open");
+
+var htmlTemplate = 
+"<style type='text/css'>{0}</style><textarea id='source'>{1}</textarea><script src='https://gnab.github.io/remark/downloads/remark-latest.min.js'></script>"+
+"<script>var slideshow = remark.create();</script>";
+
+var css = 
+"@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);"+
+"@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);"+
+"@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);"+
+"body { font-family: 'Droid Serif'; }"+
+"h1, h2, h3 {"+
+"font-family: 'Yanone Kaffeesatz';"+
+"font-weight: normal;"+
+"}"+
+".remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }";
+
+
+if(process.argv.length==2) {
+  console.log("Usage: remarkable", "filename".italic, "[--css", "file.css".italic, "]");
+  return;
+}
+
+fs.readFile("./"+process.argv[2], 'utf8', function (err, data) {
+    if (err) throw err;
+    if(process.argv.indexOf("--css")!==-1) {
+      css = fs.readFileSync("./"+process.argv[process.argv.indexOf("--css")+1], 'utf8');
+    }
+    var file = htmlTemplate.format(css, data);
+    fs.writeFile("slideshow.html", file, function(err) {
+      if(err) throw err;
+      open("./slideshow.html");
+    }); 
+});
+
